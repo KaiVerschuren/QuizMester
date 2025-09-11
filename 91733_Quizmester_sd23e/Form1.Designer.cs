@@ -31,6 +31,7 @@
             this.components = new System.ComponentModel.Container();
             this.tbcMainKver = new System.Windows.Forms.TabControl();
             this.tbpStartKver = new System.Windows.Forms.TabPage();
+            this.button1 = new System.Windows.Forms.Button();
             this.btnGuestKver = new System.Windows.Forms.Button();
             this.btnLoginKver = new System.Windows.Forms.Button();
             this.btnRegisterKver = new System.Windows.Forms.Button();
@@ -55,16 +56,17 @@
             this.btnSkipKver = new System.Windows.Forms.Button();
             this.btnAnswer4Kver = new System.Windows.Forms.Button();
             this.btnAnswer2Kver = new System.Windows.Forms.Button();
-            this.tmrMainKver = new System.Windows.Forms.Timer(this.components);
-            this.tmrQuestionKver = new System.Windows.Forms.Timer(this.components);
             this.tbpLeaderBoardKver = new System.Windows.Forms.TabPage();
-            this.tlpLeaderboardKver = new System.Windows.Forms.TableLayoutPanel();
-            this.button1 = new System.Windows.Forms.Button();
+            this.lblMessageKver = new System.Windows.Forms.Label();
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
             this.label1 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
             this.label4 = new System.Windows.Forms.Label();
+            this.tlpLeaderboardKver = new System.Windows.Forms.TableLayoutPanel();
+            this.tmrMainKver = new System.Windows.Forms.Timer(this.components);
+            this.tmrQuestionKver = new System.Windows.Forms.Timer(this.components);
+            this.lblEndScoreKver = new System.Windows.Forms.Label();
             this.tbcMainKver.SuspendLayout();
             this.tbpStartKver.SuspendLayout();
             this.tbpRegisterKver.SuspendLayout();
@@ -100,6 +102,16 @@
             this.tbpStartKver.TabIndex = 0;
             this.tbpStartKver.Text = "start";
             this.tbpStartKver.UseVisualStyleBackColor = true;
+            // 
+            // button1
+            // 
+            this.button1.Location = new System.Drawing.Point(6, 35);
+            this.button1.Name = "button1";
+            this.button1.Size = new System.Drawing.Size(96, 23);
+            this.button1.TabIndex = 0;
+            this.button1.Text = "Leaderboard";
+            this.button1.UseVisualStyleBackColor = true;
+            this.button1.Click += new System.EventHandler(this.toLeaderBoard);
             // 
             // btnGuestKver
             // 
@@ -326,6 +338,7 @@
             this.btnSkipKver.TabIndex = 0;
             this.btnSkipKver.Text = "Skip question";
             this.btnSkipKver.UseVisualStyleBackColor = true;
+            this.btnSkipKver.Click += new System.EventHandler(this.useJoker);
             // 
             // btnAnswer4Kver
             // 
@@ -349,16 +362,10 @@
             this.btnAnswer2Kver.UseVisualStyleBackColor = true;
             this.btnAnswer2Kver.Click += new System.EventHandler(this.answer_click);
             // 
-            // tmrMainKver
-            // 
-            this.tmrMainKver.Tick += new System.EventHandler(this.tmrMainKver_Tick);
-            // 
-            // tmrQuestionKver
-            // 
-            this.tmrQuestionKver.Tick += new System.EventHandler(this.tmrQuestionKver_Tick);
-            // 
             // tbpLeaderBoardKver
             // 
+            this.tbpLeaderBoardKver.Controls.Add(this.lblEndScoreKver);
+            this.tbpLeaderBoardKver.Controls.Add(this.lblMessageKver);
             this.tbpLeaderBoardKver.Controls.Add(this.tableLayoutPanel1);
             this.tbpLeaderBoardKver.Controls.Add(this.tlpLeaderboardKver);
             this.tbpLeaderBoardKver.Location = new System.Drawing.Point(4, 22);
@@ -368,31 +375,19 @@
             this.tbpLeaderBoardKver.Text = "leaderboard";
             this.tbpLeaderBoardKver.UseVisualStyleBackColor = true;
             // 
-            // tlpLeaderboardKver
+            // lblMessageKver
             // 
-            this.tlpLeaderboardKver.ColumnCount = 4;
-            this.tlpLeaderboardKver.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 25F));
-            this.tlpLeaderboardKver.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 25F));
-            this.tlpLeaderboardKver.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 25F));
-            this.tlpLeaderboardKver.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 25F));
-            this.tlpLeaderboardKver.Location = new System.Drawing.Point(441, 92);
-            this.tlpLeaderboardKver.Name = "tlpLeaderboardKver";
-            this.tlpLeaderboardKver.RowCount = 1;
-            this.tlpLeaderboardKver.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tlpLeaderboardKver.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-            this.tlpLeaderboardKver.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-            this.tlpLeaderboardKver.Size = new System.Drawing.Size(649, 413);
-            this.tlpLeaderboardKver.TabIndex = 0;
-            // 
-            // button1
-            // 
-            this.button1.Location = new System.Drawing.Point(6, 35);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(96, 23);
-            this.button1.TabIndex = 0;
-            this.button1.Text = "Leaderboard";
-            this.button1.UseVisualStyleBackColor = true;
-            this.button1.Click += new System.EventHandler(this.toLeaderBoard);
+            this.lblMessageKver.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.lblMessageKver.AutoSize = true;
+            this.lblMessageKver.Font = new System.Drawing.Font("Roboto", 21.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblMessageKver.Location = new System.Drawing.Point(3, 13);
+            this.lblMessageKver.Name = "lblMessageKver";
+            this.lblMessageKver.Size = new System.Drawing.Size(161, 35);
+            this.lblMessageKver.TabIndex = 0;
+            this.lblMessageKver.Text = "{Message}";
+            this.lblMessageKver.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // tableLayoutPanel1
             // 
@@ -409,8 +404,8 @@
             this.tableLayoutPanel1.Name = "tableLayoutPanel1";
             this.tableLayoutPanel1.RowCount = 1;
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 73F));
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 73F));
             this.tableLayoutPanel1.Size = new System.Drawing.Size(649, 73);
             this.tableLayoutPanel1.TabIndex = 0;
             // 
@@ -470,6 +465,44 @@
             this.label4.Text = "Category";
             this.label4.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
+            // tlpLeaderboardKver
+            // 
+            this.tlpLeaderboardKver.ColumnCount = 4;
+            this.tlpLeaderboardKver.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 25F));
+            this.tlpLeaderboardKver.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 25F));
+            this.tlpLeaderboardKver.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 25F));
+            this.tlpLeaderboardKver.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 25F));
+            this.tlpLeaderboardKver.Location = new System.Drawing.Point(441, 92);
+            this.tlpLeaderboardKver.Name = "tlpLeaderboardKver";
+            this.tlpLeaderboardKver.RowCount = 1;
+            this.tlpLeaderboardKver.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tlpLeaderboardKver.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 413F));
+            this.tlpLeaderboardKver.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 413F));
+            this.tlpLeaderboardKver.Size = new System.Drawing.Size(649, 413);
+            this.tlpLeaderboardKver.TabIndex = 0;
+            // 
+            // tmrMainKver
+            // 
+            this.tmrMainKver.Tick += new System.EventHandler(this.tmrMainKver_Tick);
+            // 
+            // tmrQuestionKver
+            // 
+            this.tmrQuestionKver.Tick += new System.EventHandler(this.tmrQuestionKver_Tick);
+            // 
+            // lblEndScoreKver
+            // 
+            this.lblEndScoreKver.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.lblEndScoreKver.AutoSize = true;
+            this.lblEndScoreKver.Font = new System.Drawing.Font("Roboto", 21.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblEndScoreKver.Location = new System.Drawing.Point(3, 51);
+            this.lblEndScoreKver.Name = "lblEndScoreKver";
+            this.lblEndScoreKver.Size = new System.Drawing.Size(114, 35);
+            this.lblEndScoreKver.TabIndex = 0;
+            this.lblEndScoreKver.Text = "{score}";
+            this.lblEndScoreKver.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -487,6 +520,7 @@
             this.tbpLoginKver.PerformLayout();
             this.tbpQuizKver.ResumeLayout(false);
             this.tbpLeaderBoardKver.ResumeLayout(false);
+            this.tbpLeaderBoardKver.PerformLayout();
             this.tableLayoutPanel1.ResumeLayout(false);
             this.tableLayoutPanel1.PerformLayout();
             this.ResumeLayout(false);
@@ -531,6 +565,8 @@
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.Label label4;
+        private System.Windows.Forms.Label lblMessageKver;
+        private System.Windows.Forms.Label lblEndScoreKver;
     }
 }
 

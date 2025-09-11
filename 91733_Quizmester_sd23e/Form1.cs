@@ -34,6 +34,7 @@ namespace _91733_Quizmester_sd23e
         int flashCounter = 0;
 
         int score = 0;
+        bool joker = true;
 
         public Form1()
         {
@@ -42,16 +43,11 @@ namespace _91733_Quizmester_sd23e
 
         private void Form1_Load(object sender, EventArgs e)
         {
-            tbcMainKver.Appearance = TabAppearance.FlatButtons;
-            tbcMainKver.ItemSize = new Size(0, 1);
-            tbcMainKver.SizeMode = TabSizeMode.Fixed;
-
             defaultColor = tbpQuizKver.BackColor;
-
             this.Text = "Quizmester";
-
         }
 
+        #region Navigation
         private void toStart(object sender, EventArgs e)
         {
             tbcMainKver.SelectedTab = tbpStartKver;
@@ -71,7 +67,6 @@ namespace _91733_Quizmester_sd23e
         private void toQuiz(object sender = null, EventArgs e = null)
         {
             tbcMainKver.SelectedTab = tbpQuizKver;
-
             startQuiz();
         }
 
@@ -80,9 +75,9 @@ namespace _91733_Quizmester_sd23e
             tbcMainKver.SelectedTab = tbpLeaderBoardKver;
             handleLeaderboard();
         }
+        #endregion
 
-        #region Login register
-
+        #region Login & Register
         private void btnGuestKver_Click(object sender, EventArgs e)
         {
             loggedInUser["Name"] = "Guest";
@@ -92,20 +87,15 @@ namespace _91733_Quizmester_sd23e
 
         private void btnRegisterSubmitKver_Click(object sender, EventArgs e)
         {
-
             string username = txbRegisterNameKver.Text.Trim();
             string password = txbRegisterPasswordKver.Text.Trim();
 
-            // check if input fields are non empty
             if (string.IsNullOrEmpty(username) || string.IsNullOrEmpty(password))
             {
                 lblRegisterResultKver.Text = "Please fill in all fields.";
-
-                // exit
                 return;
             }
 
-            // check if password is at least 4 chars
             if (password.Length < 4)
             {
                 lblRegisterResultKver.Text = "Password must be at least 4 characters.";
@@ -115,23 +105,17 @@ namespace _91733_Quizmester_sd23e
             using (SqlConnection sqlConnection = new SqlConnection(connectionString))
             {
                 sqlConnection.Open();
-
-                // check if username exists
                 if (checkIfUserExists(username, sqlConnection))
                     return;
-
-                // insert new user
                 registerUser(username, password, sqlConnection);
             }
         }
 
         private void registerUser(string username, string password, SqlConnection sqlConnection)
         {
-            // insert new user
             using (SqlCommand insertUser = new SqlCommand("INSERT INTO users (userName, userPass) VALUES (@username, @password)", sqlConnection))
             {
                 insertUser.Parameters.AddWithValue("@username", username);
-                // plain text, should probably hash sometime
                 insertUser.Parameters.AddWithValue("@password", password);
 
                 insertUser.ExecuteNonQuery();
@@ -143,12 +127,9 @@ namespace _91733_Quizmester_sd23e
 
         private bool checkIfUserExists(string username, SqlConnection sqlConnection)
         {
-            // this retrieves any user matchin the text in the input field, then if the existing users are above 0, meaning
-            // theres a user with the same name, it returns true.
             using (SqlCommand checkUser = new SqlCommand("SELECT COUNT(*) FROM users WHERE userName = @username", sqlConnection))
             {
                 checkUser.Parameters.AddWithValue("@username", username);
-
                 int exists = (int)checkUser.ExecuteScalar();
                 if (exists > 0)
                 {
@@ -161,19 +142,12 @@ namespace _91733_Quizmester_sd23e
 
         private void btnLoginSubmitKver_Click(object sender, EventArgs e)
         {
-            // get input fields:
-            // name: txbLoginName
-            // pass: txbLoginPasswordKver
-
-            // sql to check for a user matching and a matching password
-
             string username = txbLoginName.Text;
             string password = txbLoginPasswordKver.Text;
 
             using (SqlConnection sqlConnection = new SqlConnection(connectionString))
             {
                 sqlConnection.Open();
-
                 checkForMatchingUser(username, password, sqlConnection);
             }
         }
@@ -189,7 +163,6 @@ namespace _91733_Quizmester_sd23e
 
                 if (userCount > 0)
                 {
-                    // store logged in user info
                     loggedInUser["Name"] = username;
                     loggedInUser["Pass"] = password;
 
@@ -202,9 +175,9 @@ namespace _91733_Quizmester_sd23e
                 }
             }
         }
-
         #endregion
 
+        #region Quiz Core
         private void startQuiz()
         {
             Button[] buttons = { btnAnswer1Kver, btnAnswer2Kver, btnAnswer3Kver, btnAnswer4Kver };
@@ -212,15 +185,14 @@ namespace _91733_Quizmester_sd23e
             {
                 answerBtn.Enabled = true;
             }
+            btnSkipKver.Enabled = true;
 
             int category = 2;
             questions = Question.FetchQuestions(category);
             currentCategoryId = category;
 
-
             showQuestion();
 
-            // times 3 foreach question
             timeLeft = questions.Count() * 3;
             tmrMainKver.Start();
         }
@@ -256,8 +228,8 @@ namespace _91733_Quizmester_sd23e
         private void setButtons(string[] answers, int correctAnswer)
         {
             var shuffled = answers
-                .Select((text, index) => new { Text = text, Index = index + 1 }) // +1 so it's 1-4 instead of 0-3
-                .OrderBy(x => Guid.NewGuid()) // random shuffle method thingy
+                .Select((text, index) => new { Text = text, Index = index + 1 })
+                .OrderBy(x => Guid.NewGuid())
                 .ToList();
 
             Button[] buttons = { btnAnswer1Kver, btnAnswer2Kver, btnAnswer3Kver, btnAnswer4Kver };
@@ -271,7 +243,9 @@ namespace _91733_Quizmester_sd23e
             Button correctBtn = buttons.First(b => (int)b.Tag == correctAnswer);
             Console.WriteLine("Correct answer: " + correctBtn.Text + " Tag: " + correctAnswer);
         }
+        #endregion
 
+        #region Answer Handling
         private async void answer_click(object sender, EventArgs e)
         {
             Button btn = (Button)sender;
@@ -283,32 +257,27 @@ namespace _91733_Quizmester_sd23e
             if (chosenAnswer == q.CorrectAnswer)
             {
                 timeLeft += 3;
-
                 int score = (int)Math.Round((questionTimeLeft / 5.0) * 100);
                 changeScore(score, true);
             }
             else
             {
                 timeLeft -= 3;
-
                 int score = (int)Math.Round((questionTimeLeft / 5.0) * 100);
                 changeScore(score, false);
             }
 
             tmrQuestionKver.Stop();
-
-            // show colors (true = show result)
             await HandleButtonColors(q.CorrectAnswer);
 
             currentQuestionIndex++;
             if (currentQuestionIndex < questions.Count)
             {
-                Console.WriteLine("current question: " + currentQuestionIndex + " current count: " + questions.Count);
                 showQuestion();
             }
             else
             {
-                quizFinish("Finished", true);
+                quizFinish("Finished!", true);
             }
         }
 
@@ -322,6 +291,8 @@ namespace _91733_Quizmester_sd23e
                 btn.Enabled = false;
             }
 
+            btnSkipKver.Enabled = false;
+
             await Task.Delay(1000);
 
             foreach (Button btn in buttons)
@@ -330,6 +301,7 @@ namespace _91733_Quizmester_sd23e
                 btn.Enabled = true;
             }
 
+            btnSkipKver.Enabled = true;
         }
 
         private void ShowButtonColors(int correctTag)
@@ -342,9 +314,10 @@ namespace _91733_Quizmester_sd23e
                 btn.Enabled = false;
             }
 
-            // Use Forms Timer for 1-second delay
+            btnSkipKver.Enabled = false;
+
             System.Windows.Forms.Timer colorTimer = new System.Windows.Forms.Timer();
-            colorTimer.Interval = 1000; // 1 second
+            colorTimer.Interval = 1000;
             colorTimer.Tick += (s, e) =>
             {
                 foreach (Button btn in buttons)
@@ -353,9 +326,9 @@ namespace _91733_Quizmester_sd23e
                     btn.Enabled = true;
                 }
 
-                // Move to the next question AFTER the delay
                 currentQuestionIndex++;
                 showQuestion();
+                btnSkipKver.Enabled = true;
 
                 colorTimer.Stop();
                 colorTimer.Dispose();
@@ -364,14 +337,14 @@ namespace _91733_Quizmester_sd23e
             };
             colorTimer.Start();
         }
+        #endregion
 
+        #region Timers
         private void tmrMainKver_Tick(object sender, EventArgs e)
         {
             if (timeLeft < 10)
             {
                 flashCounter++;
-
-                // every 10 ticks = 1 second (because Interval = 100ms)
                 if (flashCounter >= 10)
                 {
                     flashCounter = 0;
@@ -389,24 +362,9 @@ namespace _91733_Quizmester_sd23e
             {
                 tmrMainKver.Stop();
                 lblTimeLeftKver.Text = "0.0";
-                tbpQuizKver.BackColor = defaultColor; // reset color
+                tbpQuizKver.BackColor = defaultColor;
                 quizFinish("Times up", false);
             }
-        }
-
-        // op as in operator, true is add, false is subtract
-        private void changeScore(int change, bool op)
-        {
-            if (op)
-            {
-                score += change;
-            }
-            else
-            {
-                score -= change;
-            }
-
-            lblScoreKver.Text = score.ToString();
         }
 
         private void tmrQuestionKver_Tick(object sender, EventArgs e)
@@ -423,33 +381,50 @@ namespace _91733_Quizmester_sd23e
                 ShowButtonColors(currentCorrectAnswer);
             }
         }
+        #endregion
+
+        #region Score & Finish
+        private void changeScore(int change, bool op)
+        {
+            if (op)
+                score += change;
+            else
+                score -= change;
+
+            lblScoreKver.Text = score.ToString();
+        }
 
         private void quizFinish(string message, bool win)
         {
-            // quiz finished
-            MessageBox.Show(message);
+            tmrMainKver.Stop();
+            tmrQuestionKver.Stop();
+
+            lblMessageKver.Text = message;
+            lblEndScoreKver.Text = "Score: " + score.ToString();
+
             Button[] buttons = { btnAnswer1Kver, btnAnswer2Kver, btnAnswer3Kver, btnAnswer4Kver };
             foreach (Button btn in buttons)
             {
                 btn.Enabled = false;
             }
+
             if (win)
             {
                 addScoreToDB();
             }
             toLeaderBoard();
         }
+        #endregion
 
+        #region Leaderboard
         private void handleLeaderboard()
         {
-
-            // Get leaderboard from DB
-            var leaderboard = getLeaderboard(); // string[,] array [10,2]
+            var leaderboard = getLeaderboard();
 
             tlpLeaderboardKver.Controls.Clear();
             tlpLeaderboardKver.RowStyles.Clear();
 
-            int rows = leaderboard.GetLength(0); // usually 10
+            int rows = leaderboard.GetLength(0);
             tlpLeaderboardKver.RowCount = rows;
 
             for (int i = 0; i < rows; i++)
@@ -465,34 +440,29 @@ namespace _91733_Quizmester_sd23e
 
                 tlpLeaderboardKver.Controls.Add(new Label
                 {
-                    Text = leaderboard[i, 0], // username from DB
+                    Text = leaderboard[i, 0],
                     Dock = DockStyle.Fill,
                     TextAlign = ContentAlignment.MiddleCenter
                 }, 1, i);
 
                 tlpLeaderboardKver.Controls.Add(new Label
                 {
-                    Text = leaderboard[i, 1], // score from DB
+                    Text = leaderboard[i, 1],
                     Dock = DockStyle.Fill,
                     TextAlign = ContentAlignment.MiddleCenter
                 }, 2, i);
 
                 tlpLeaderboardKver.Controls.Add(new Label
                 {
-                    Text = leaderboard[i, 2], // categoryid from DB
+                    Text = leaderboard[i, 2],
                     Dock = DockStyle.Fill,
                     TextAlign = ContentAlignment.MiddleCenter
                 }, 3, i);
             }
         }
 
-
         private void addScoreToDB()
         {
-            // use
-            // loggedInUser["Name"] = "";
-            // to set the name, and get the score from the variable score
-
             string userName = loggedInUser["Name"];
             int userScore = score;
             int category = currentCategoryId;
@@ -512,7 +482,7 @@ namespace _91733_Quizmester_sd23e
 
         private string[,] getLeaderboard()
         {
-            string[,] leaderboard = new string[10, 3]; // [rank, name & score]
+            string[,] leaderboard = new string[10, 3];
 
             string sql = "SELECT TOP 10 userName, score, categoryId FROM rankings ORDER BY score DESC";
 
@@ -532,8 +502,36 @@ namespace _91733_Quizmester_sd23e
                     }
                 }
             }
-
             return leaderboard;
         }
+        #endregion
+
+        #region Joker
+        private void useJoker(object sender = null, EventArgs e = null)
+        {
+            if (joker != true)
+            {
+                btnSkipKver.Enabled = false;
+                return;
+            }
+
+            if (currentQuestionIndex < (questions.Count - 1))
+            {
+                joker = false;
+                btnSkipKver.Enabled = false;
+
+                tmrQuestionKver.Stop();
+                tmrMainKver.Stop();
+                ShowButtonColors(currentCorrectAnswer);
+
+                currentQuestionIndex++;
+                showQuestion();
+            }
+            else
+            {
+                quizFinish("You used your joker to win", true);
+            }
+        }
+        #endregion
     }
 }
