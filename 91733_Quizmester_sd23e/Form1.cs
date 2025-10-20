@@ -64,16 +64,27 @@ namespace _91733_Quizmester_sd23e
             tbcMainKver.SelectedTab = tbpLoginKver;
         }
 
-        private void toQuiz(object sender = null, EventArgs e = null)
+        private void toQuiz( int category = 0, object sender = null, EventArgs e = null)
         {
             tbcMainKver.SelectedTab = tbpQuizKver;
-            startQuiz();
+            startQuiz(category);
         }
 
         private void toLeaderBoard(object sender = null, EventArgs e = null)
         {
             tbcMainKver.SelectedTab = tbpLeaderBoardKver;
             handleLeaderboard();
+        }
+
+        private void toCategory( object sender = null, EventArgs e = null)
+        {
+            tbcMainKver.SelectedTab = tbpCategoriesKver;
+        }
+
+        private void toAdminPanel(object sender, EventArgs e)
+        {
+            tbcMainKver.SelectedTab = tbpAdminKver;
+            LoadQuestionsToGrid();
         }
         #endregion
 
@@ -82,7 +93,7 @@ namespace _91733_Quizmester_sd23e
         {
             loggedInUser["Name"] = "Guest";
             loggedInUser["Pass"] = "";
-            toQuiz(null, EventArgs.Empty);
+            toCategory();
         }
 
         private void btnRegisterSubmitKver_Click(object sender, EventArgs e)
@@ -167,7 +178,7 @@ namespace _91733_Quizmester_sd23e
                     loggedInUser["Pass"] = password;
 
                     lblLoginResultKver.Text = "Login successful!" + "Logged in as: " + loggedInUser["Name"];
-                    toQuiz();
+                    toCategory();
                 }
                 else
                 {
@@ -177,8 +188,26 @@ namespace _91733_Quizmester_sd23e
         }
         #endregion
 
+        #region Category Selection
+
+        private void btnMainQuizKver_Click(object sender, EventArgs e)
+        {
+            toQuiz(0);
+        }
+
+        private void btnRLQuizKver_Click(object sender, EventArgs e)
+        {
+            toQuiz(2);
+        }
+
+        private void btnMinecraftKver_Click(object sender, EventArgs e)
+        {
+            toQuiz(1);
+        }
+        #endregion
+
         #region Quiz Core
-        private void startQuiz()
+        private void startQuiz(int category)
         {
             Button[] buttons = { btnAnswer1Kver, btnAnswer2Kver, btnAnswer3Kver, btnAnswer4Kver };
             foreach (Button answerBtn in buttons)
@@ -187,7 +216,6 @@ namespace _91733_Quizmester_sd23e
             }
             btnSkipKver.Enabled = true;
 
-            int category = 2;
             questions = Question.FetchQuestions(category);
             currentCategoryId = category;
 
@@ -532,6 +560,72 @@ namespace _91733_Quizmester_sd23e
                 quizFinish("You used your joker to win", true);
             }
         }
+        #endregion
+
+        #region Admin Panel
+        private void LoadQuestionsToGrid()
+        {
+            List<Question> list = Question.FetchQuestions(0); // 0 means all categories
+            dgvAdminKver.DataSource = null;
+            dgvAdminKver.DataSource = list;
+        }
+
+        private void UpdateQuestionsFromGrid()
+        {
+            string connStr = @"Data Source=localhost\sqlexpress;Initial Catalog=quiz;Integrated Security=True;Encrypt=True;TrustServerCertificate=True;";
+
+            using (SqlConnection conn = new SqlConnection(connStr))
+            {
+                conn.Open();
+
+                foreach (DataGridViewRow row in dgvAdminKver.Rows)
+                {
+                    if (row.IsNewRow) continue;
+
+                    int id = Convert.ToInt32(row.Cells["id"].Value);
+                    string questionText = row.Cells["QuestionText"].Value.ToString();
+                    string answer1 = row.Cells["Answer1"].Value.ToString();
+                    string answer2 = row.Cells["Answer2"].Value.ToString();
+                    string answer3 = row.Cells["Answer3"].Value.ToString();
+                    string answer4 = row.Cells["Answer4"].Value.ToString();
+                    int correctAnswer = Convert.ToInt32(row.Cells["CorrectAnswer"].Value);
+                    int categoryId = Convert.ToInt32(row.Cells["CategoryId"].Value);
+
+                    string sql = @"UPDATE questions
+                           SET questionText = @questionText,
+                               answer1 = @answer1,
+                               answer2 = @answer2,
+                               answer3 = @answer3,
+                               answer4 = @answer4,
+                               correctAnswer = @correctAnswer,
+                               categoryId = @categoryId
+                           WHERE id = @id";
+
+                    using (SqlCommand cmd = new SqlCommand(sql, conn))
+                    {
+                        cmd.Parameters.AddWithValue("@id", id);
+                        cmd.Parameters.AddWithValue("@questionText", questionText);
+                        cmd.Parameters.AddWithValue("@answer1", answer1);
+                        cmd.Parameters.AddWithValue("@answer2", answer2);
+                        cmd.Parameters.AddWithValue("@answer3", answer3);
+                        cmd.Parameters.AddWithValue("@answer4", answer4);
+                        cmd.Parameters.AddWithValue("@correctAnswer", correctAnswer);
+                        cmd.Parameters.AddWithValue("@categoryId", categoryId);
+
+                        cmd.ExecuteNonQuery();
+                    }
+                }
+            }
+
+            MessageBox.Show("Questions updated!!!");
+        }
+
+        private void btnUpdateDataKver_Click(object sender, EventArgs e)
+        {
+            UpdateQuestionsFromGrid();
+            LoadQuestionsToGrid();
+        }
+
         #endregion
     }
 }

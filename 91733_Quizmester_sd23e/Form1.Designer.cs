@@ -31,6 +31,7 @@
             this.components = new System.ComponentModel.Container();
             this.tbcMainKver = new System.Windows.Forms.TabControl();
             this.tbpStartKver = new System.Windows.Forms.TabPage();
+            this.btnAdminPanel = new System.Windows.Forms.Button();
             this.button1 = new System.Windows.Forms.Button();
             this.btnGuestKver = new System.Windows.Forms.Button();
             this.btnLoginKver = new System.Windows.Forms.Button();
@@ -57,6 +58,7 @@
             this.btnAnswer4Kver = new System.Windows.Forms.Button();
             this.btnAnswer2Kver = new System.Windows.Forms.Button();
             this.tbpLeaderBoardKver = new System.Windows.Forms.TabPage();
+            this.lblEndScoreKver = new System.Windows.Forms.Label();
             this.lblMessageKver = new System.Windows.Forms.Label();
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
             this.label1 = new System.Windows.Forms.Label();
@@ -64,9 +66,17 @@
             this.label3 = new System.Windows.Forms.Label();
             this.label4 = new System.Windows.Forms.Label();
             this.tlpLeaderboardKver = new System.Windows.Forms.TableLayoutPanel();
+            this.tbpCategoriesKver = new System.Windows.Forms.TabPage();
+            this.btnMinecraftKver = new System.Windows.Forms.Button();
+            this.btnRLQuizKver = new System.Windows.Forms.Button();
+            this.btnMainQuizKver = new System.Windows.Forms.Button();
+            this.tbpAdminKver = new System.Windows.Forms.TabPage();
+            this.btnUpdateDataKver = new System.Windows.Forms.Button();
+            this.dgvAdminKver = new System.Windows.Forms.DataGridView();
             this.tmrMainKver = new System.Windows.Forms.Timer(this.components);
             this.tmrQuestionKver = new System.Windows.Forms.Timer(this.components);
-            this.lblEndScoreKver = new System.Windows.Forms.Label();
+            this.quizDataSet = new _91733_Quizmester_sd23e.quizDataSet();
+            this.quizDataSetBindingSource = new System.Windows.Forms.BindingSource(this.components);
             this.tbcMainKver.SuspendLayout();
             this.tbpStartKver.SuspendLayout();
             this.tbpRegisterKver.SuspendLayout();
@@ -74,6 +84,11 @@
             this.tbpQuizKver.SuspendLayout();
             this.tbpLeaderBoardKver.SuspendLayout();
             this.tableLayoutPanel1.SuspendLayout();
+            this.tbpCategoriesKver.SuspendLayout();
+            this.tbpAdminKver.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.dgvAdminKver)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.quizDataSet)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.quizDataSetBindingSource)).BeginInit();
             this.SuspendLayout();
             // 
             // tbcMainKver
@@ -83,6 +98,8 @@
             this.tbcMainKver.Controls.Add(this.tbpLoginKver);
             this.tbcMainKver.Controls.Add(this.tbpQuizKver);
             this.tbcMainKver.Controls.Add(this.tbpLeaderBoardKver);
+            this.tbcMainKver.Controls.Add(this.tbpCategoriesKver);
+            this.tbcMainKver.Controls.Add(this.tbpAdminKver);
             this.tbcMainKver.Location = new System.Drawing.Point(12, 12);
             this.tbcMainKver.Name = "tbcMainKver";
             this.tbcMainKver.SelectedIndex = 0;
@@ -91,6 +108,7 @@
             // 
             // tbpStartKver
             // 
+            this.tbpStartKver.Controls.Add(this.btnAdminPanel);
             this.tbpStartKver.Controls.Add(this.button1);
             this.tbpStartKver.Controls.Add(this.btnGuestKver);
             this.tbpStartKver.Controls.Add(this.btnLoginKver);
@@ -102,6 +120,16 @@
             this.tbpStartKver.TabIndex = 0;
             this.tbpStartKver.Text = "start";
             this.tbpStartKver.UseVisualStyleBackColor = true;
+            // 
+            // btnAdminPanel
+            // 
+            this.btnAdminPanel.Location = new System.Drawing.Point(108, 35);
+            this.btnAdminPanel.Name = "btnAdminPanel";
+            this.btnAdminPanel.Size = new System.Drawing.Size(96, 23);
+            this.btnAdminPanel.TabIndex = 0;
+            this.btnAdminPanel.Text = "Admin";
+            this.btnAdminPanel.UseVisualStyleBackColor = true;
+            this.btnAdminPanel.Click += new System.EventHandler(this.toAdminPanel);
             // 
             // button1
             // 
@@ -375,6 +403,20 @@
             this.tbpLeaderBoardKver.Text = "leaderboard";
             this.tbpLeaderBoardKver.UseVisualStyleBackColor = true;
             // 
+            // lblEndScoreKver
+            // 
+            this.lblEndScoreKver.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.lblEndScoreKver.AutoSize = true;
+            this.lblEndScoreKver.Font = new System.Drawing.Font("Roboto", 21.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblEndScoreKver.Location = new System.Drawing.Point(3, 51);
+            this.lblEndScoreKver.Name = "lblEndScoreKver";
+            this.lblEndScoreKver.Size = new System.Drawing.Size(114, 35);
+            this.lblEndScoreKver.TabIndex = 0;
+            this.lblEndScoreKver.Text = "{score}";
+            this.lblEndScoreKver.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
             // lblMessageKver
             // 
             this.lblMessageKver.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
@@ -481,6 +523,77 @@
             this.tlpLeaderboardKver.Size = new System.Drawing.Size(649, 413);
             this.tlpLeaderboardKver.TabIndex = 0;
             // 
+            // tbpCategoriesKver
+            // 
+            this.tbpCategoriesKver.Controls.Add(this.btnMinecraftKver);
+            this.tbpCategoriesKver.Controls.Add(this.btnRLQuizKver);
+            this.tbpCategoriesKver.Controls.Add(this.btnMainQuizKver);
+            this.tbpCategoriesKver.Location = new System.Drawing.Point(4, 22);
+            this.tbpCategoriesKver.Name = "tbpCategoriesKver";
+            this.tbpCategoriesKver.Size = new System.Drawing.Size(1093, 508);
+            this.tbpCategoriesKver.TabIndex = 6;
+            this.tbpCategoriesKver.Text = "categories";
+            this.tbpCategoriesKver.UseVisualStyleBackColor = true;
+            // 
+            // btnMinecraftKver
+            // 
+            this.btnMinecraftKver.Location = new System.Drawing.Point(56, 42);
+            this.btnMinecraftKver.Name = "btnMinecraftKver";
+            this.btnMinecraftKver.Size = new System.Drawing.Size(75, 23);
+            this.btnMinecraftKver.TabIndex = 0;
+            this.btnMinecraftKver.Text = "Minecraft";
+            this.btnMinecraftKver.UseVisualStyleBackColor = true;
+            this.btnMinecraftKver.Click += new System.EventHandler(this.btnMinecraftKver_Click);
+            // 
+            // btnRLQuizKver
+            // 
+            this.btnRLQuizKver.Location = new System.Drawing.Point(97, 13);
+            this.btnRLQuizKver.Name = "btnRLQuizKver";
+            this.btnRLQuizKver.Size = new System.Drawing.Size(93, 23);
+            this.btnRLQuizKver.TabIndex = 0;
+            this.btnRLQuizKver.Text = "Rocket league";
+            this.btnRLQuizKver.UseVisualStyleBackColor = true;
+            this.btnRLQuizKver.Click += new System.EventHandler(this.btnRLQuizKver_Click);
+            // 
+            // btnMainQuizKver
+            // 
+            this.btnMainQuizKver.Location = new System.Drawing.Point(16, 13);
+            this.btnMainQuizKver.Name = "btnMainQuizKver";
+            this.btnMainQuizKver.Size = new System.Drawing.Size(75, 23);
+            this.btnMainQuizKver.TabIndex = 0;
+            this.btnMainQuizKver.Text = "Main";
+            this.btnMainQuizKver.UseVisualStyleBackColor = true;
+            this.btnMainQuizKver.Click += new System.EventHandler(this.btnMainQuizKver_Click);
+            // 
+            // tbpAdminKver
+            // 
+            this.tbpAdminKver.Controls.Add(this.btnUpdateDataKver);
+            this.tbpAdminKver.Controls.Add(this.dgvAdminKver);
+            this.tbpAdminKver.Location = new System.Drawing.Point(4, 22);
+            this.tbpAdminKver.Name = "tbpAdminKver";
+            this.tbpAdminKver.Size = new System.Drawing.Size(1093, 508);
+            this.tbpAdminKver.TabIndex = 7;
+            this.tbpAdminKver.Text = "Admin";
+            this.tbpAdminKver.UseVisualStyleBackColor = true;
+            // 
+            // btnUpdateDataKver
+            // 
+            this.btnUpdateDataKver.Location = new System.Drawing.Point(3, 481);
+            this.btnUpdateDataKver.Name = "btnUpdateDataKver";
+            this.btnUpdateDataKver.Size = new System.Drawing.Size(75, 23);
+            this.btnUpdateDataKver.TabIndex = 1;
+            this.btnUpdateDataKver.Text = "Save data";
+            this.btnUpdateDataKver.UseVisualStyleBackColor = true;
+            this.btnUpdateDataKver.Click += new System.EventHandler(this.btnUpdateDataKver_Click);
+            // 
+            // dgvAdminKver
+            // 
+            this.dgvAdminKver.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dgvAdminKver.Location = new System.Drawing.Point(3, 3);
+            this.dgvAdminKver.Name = "dgvAdminKver";
+            this.dgvAdminKver.Size = new System.Drawing.Size(606, 472);
+            this.dgvAdminKver.TabIndex = 0;
+            // 
             // tmrMainKver
             // 
             this.tmrMainKver.Tick += new System.EventHandler(this.tmrMainKver_Tick);
@@ -489,19 +602,15 @@
             // 
             this.tmrQuestionKver.Tick += new System.EventHandler(this.tmrQuestionKver_Tick);
             // 
-            // lblEndScoreKver
+            // quizDataSet
             // 
-            this.lblEndScoreKver.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.lblEndScoreKver.AutoSize = true;
-            this.lblEndScoreKver.Font = new System.Drawing.Font("Roboto", 21.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblEndScoreKver.Location = new System.Drawing.Point(3, 51);
-            this.lblEndScoreKver.Name = "lblEndScoreKver";
-            this.lblEndScoreKver.Size = new System.Drawing.Size(114, 35);
-            this.lblEndScoreKver.TabIndex = 0;
-            this.lblEndScoreKver.Text = "{score}";
-            this.lblEndScoreKver.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.quizDataSet.DataSetName = "quizDataSet";
+            this.quizDataSet.SchemaSerializationMode = System.Data.SchemaSerializationMode.IncludeSchema;
+            // 
+            // quizDataSetBindingSource
+            // 
+            this.quizDataSetBindingSource.DataSource = this.quizDataSet;
+            this.quizDataSetBindingSource.Position = 0;
             // 
             // Form1
             // 
@@ -523,6 +632,11 @@
             this.tbpLeaderBoardKver.PerformLayout();
             this.tableLayoutPanel1.ResumeLayout(false);
             this.tableLayoutPanel1.PerformLayout();
+            this.tbpCategoriesKver.ResumeLayout(false);
+            this.tbpAdminKver.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.dgvAdminKver)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.quizDataSet)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.quizDataSetBindingSource)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -567,6 +681,16 @@
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.Label lblMessageKver;
         private System.Windows.Forms.Label lblEndScoreKver;
+        private System.Windows.Forms.TabPage tbpCategoriesKver;
+        private System.Windows.Forms.Button btnMainQuizKver;
+        private System.Windows.Forms.Button btnMinecraftKver;
+        private System.Windows.Forms.Button btnRLQuizKver;
+        private System.Windows.Forms.TabPage tbpAdminKver;
+        private System.Windows.Forms.DataGridView dgvAdminKver;
+        private System.Windows.Forms.BindingSource quizDataSetBindingSource;
+        private quizDataSet quizDataSet;
+        private System.Windows.Forms.Button btnAdminPanel;
+        private System.Windows.Forms.Button btnUpdateDataKver;
     }
 }
 

@@ -1,4 +1,5 @@
-﻿using System;
+﻿
+using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
@@ -8,6 +9,8 @@ namespace _91733_Quizmester_sd23e
     internal class Question
     {
         // properties for each question
+
+        public string id { get; set; }
         public string QuestionText { get; set; }
         public string Answer1 { get; set; }
         public string Answer2 { get; set; }
@@ -43,6 +46,7 @@ namespace _91733_Quizmester_sd23e
                         {
                             questions.Add(new Question
                             {
+                                id = reader["id"].ToString(),
                                 QuestionText = reader["questionText"].ToString(),
                                 Answer1 = reader["answer1"].ToString(),
                                 Answer2 = reader["answer2"].ToString(),
